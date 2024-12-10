@@ -1,0 +1,25 @@
+name: CI with Docker Compose
+
+on:
+    pull_request:
+        branches:
+            - main
+    push:
+        branches:
+            - main
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            #Step 2:Set up Docker compose
+            - name: Start services with Docker compose
+              run: docker compose up --build --abort-on-container-exit
+
+            #Step 3: Tear down services
+            - name: Stop and clean up Docker Compose
+              if: always()
+              run: docker compose down
